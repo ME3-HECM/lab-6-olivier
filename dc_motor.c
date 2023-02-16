@@ -14,8 +14,9 @@ void initDCmotorsPWM(unsigned int PWMperiod){
     // timer 2 config
     //max pulse length change= 2.1-0.5ms, angle range=180deg
     //1.6/180= 1/112500, put that into Tint eqn to get 142.222
-    //closest PS that gives a smaller tick interval is 128
-    T2CONbits.CKPS=0b1000; // 1:128 prescaler
+    //closest PS that gives a smaller tick interval is 128, 
+    //but use smaller to give higher resolution of ticks
+    T2CONbits.CKPS=0b0110; // 1:164 prescaler
     T2HLTbits.MODE=0b00000; // Free Running Mode, software gate only
     T2CLKCONbits.CS=0b0001; // Fosc/4
 

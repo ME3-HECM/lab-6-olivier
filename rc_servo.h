@@ -4,7 +4,8 @@
 #include <xc.h>
 
 #define _XTAL_FREQ 64000000
-#define T_PERIOD ???? // enter your total period value here (i.e. timer ticks for 20 ms) (no = sign for #defines)
+//20= Tint *count, we want count i.e. timer ticks
+#define T_PERIOD 40000 // enter your total period value here (i.e. timer ticks for 20 ms) (no = sign for #defines)
 
 unsigned int on_period,off_period;
 

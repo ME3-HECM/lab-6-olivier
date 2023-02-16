@@ -60,10 +60,15 @@ void write16bitTMR0val(unsigned int tmp)
 
 /************************************
  * Function to set the on_period and off_period variables used in the ISR
- * the on_period varies linearly according to angle (-90 deg is 0.5 ms, +90 is 2.1 ms)
+ * the on_period varies linearly according to angle (-90 deg is 1 ms, +90 is 2 ms)
  * off_period is the remaining time left (calculate from on_period and T_PERIOD)
 ************************************/
 void angle2PWM(int angle){
-    on_period = ???;	//avoid floating point numbers and be careful of calculation order...
-    off_period = ???;
+    // to oscillate from -90 to 90 degrees
+    // ticks corresponding to 1ms = 1/Tint=2000
+    //additional ticks = 1.6/180 for amount of time for one angle then
+    //1angletime/Tint= additional ticks for one angle
+    //total period =20ms, = on period +off period, off=20-on
+    on_period = 2000 + 11*angle;	//avoid floating point numbers and be careful of calculation order...
+    off_period = T_PERIOD-on_period;
 }
