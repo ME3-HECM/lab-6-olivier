@@ -163,5 +163,5 @@ void ADC2String(char *buf,unsigned int ADC_val){
     int int_part= (ADC_val)/77.27; //i.e 255/3.3v= 77.27....
     int frac_part=  (100*ADC_val)/77.27 -int_part*100;
 	// and format as a string using sprintf (see GitHub readme)
-    sprintf(buf,"LDR: %d Volts ",ADC_val);
+    sprintf(buf," %d Volts",ADC_val);
 }
