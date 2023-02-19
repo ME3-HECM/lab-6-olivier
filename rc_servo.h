@@ -15,6 +15,6 @@ void __interrupt(high_priority) HighISR();
 void Timer0_init(void);
 void write16bitTMR0val(unsigned int);
 
-void angle2PWM(int angle);
+void angle2PWM(unsigned int angle);
 
 #endif

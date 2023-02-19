@@ -8,16 +8,29 @@
 
 #include <xc.h>
 #include "rc_servo.h"
+#include "LCD.h"
 
 #define _XTAL_FREQ 64000000 //note intrinsic _delay function is 62.5ns at 64,000,000Hz  
 
 void main(void){
     Timer0_init();
     Interrupts_init();
+    //LCD_Init();
+    LCD_setline(0);
+    char ar[20];
 	//don't forget TRIS for your output!
-
+    TRISDbits.TRISD5=0; 
     while(1){
 		//write your code to call angle2PWM() to set the servo angle
+        //runs 180 times incrementing the angle each time 
+        int x;
+        for (x=0;x<180;x++){
+            angle2PWM(x);
+            ADC2String(ar,x);
+            LCD_sendstring(ar);
+            __delay_ms(50);
+            
+        }
 
     }
 }
