@@ -9,28 +9,30 @@
 #include <xc.h>
 #include "rc_servo.h"
 #include "LCD.h"
+#include "ADC.h"
+#include "comparator.h"
 
 #define _XTAL_FREQ 64000000 //note intrinsic _delay function is 62.5ns at 64,000,000Hz  
 
 void main(void){
     Timer0_init();
     Interrupts_init();
+    ADC_init();
+    Comp1_init();
+    DAC_init();
     while(1){
  
 		//write your code to call angle2PWM() to set the servo angle
         //runs 180 times incrementing the angle each time 
-        int x;
-       
-        for (x=-90;x<=90;x++){
-            angle2PWM(x);
-            //20 degree angle change in a second
-            __delay_ms(10);
+
+        int LDR = ADC_getval();
+        if (LDR<50)//if the light is low open the blind
+        {
+            angle2PWM(90);
         }
-        //write your code to call angle2PWM() to set the servo angle
-        //runs 180 times incrementing the angle each time but this time back down
-        for (x=90;x>=(-90);x--){
-            angle2PWM(x);
-            __delay_ms(10);
+        if (LDR>150)//if the light is high close the blind
+        {
+            angle2PWM(-90);
         }
 
     }
