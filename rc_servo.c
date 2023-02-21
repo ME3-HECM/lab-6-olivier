@@ -67,12 +67,12 @@ void write16bitTMR0val(unsigned int tmp)
  * the on_period varies linearly according to angle (-90 deg is 1 ms, +90 is 2 ms)
  * off_period is the remaining time left (calculate from on_period and T_PERIOD)
 ************************************/
-void angle2PWM(unsigned int angle){
+void angle2PWM(int angle){
     // to oscillate from -90 to 90 degrees
     // ticks corresponding to 1ms = 1/Tint=2000
     //additional ticks per angle time = 1/180 for amount of time for one angle then
     //angletime/Tint= additional ticks for one angle
     //total period =20ms, = on period +off period, off=20-on
-    on_period = 3000 + (20*angle);	//avoid floating point numbers and be careful of calculation order...
+    on_period = 3000 + (25*angle);	//avoid floating point numbers and be careful of calculation order...
     off_period = T_PERIOD-on_period;
 }
