@@ -12,17 +12,12 @@ void initDCmotorsPWM(unsigned int PWMperiod){
     RG6PPS=0x08; //CCP4 on RG6
 
     // timer 2 config
-    //max pulse length change= 2.1-0.5ms, angle range=180deg
-    //1.6/180= 1/112500, put that into Tint eqn to get 142.222
-    //closest PS that gives a smaller tick interval is 128, 
-    //but use smaller to give higher resolution of ticks
-    T2CONbits.CKPS=0b0110; // 1:164 prescaler
+    T2CONbits.CKPS=0b100; // 1:64 prescaler
     T2HLTbits.MODE=0b00000; // Free Running Mode, software gate only
     T2CLKCONbits.CS=0b0001; // Fosc/4
 
     // Tpwm*(Fosc/4)/prescaler - 1 = PTPER
-    // 0.0001s*16MHz/16 -1 = 99
-    T2PR=??; //Period reg 10kHz base period
+    T2PR=99; //Period reg 10kHz base period
     T2CONbits.ON=1;
     
     //setup CCP modules to output PMW signals
@@ -57,13 +52,13 @@ void initDCmotorsPWM(unsigned int PWMperiod){
 }
 
 // function to set CCP PWM output from the values in the motor structure
-void setMotorPWM(DC_motor *m)
+void setMotorPWM(struct DC_motor *m)
 {
     unsigned char posDuty, negDuty; //duty cycle values for different sides of the motor
     
     if(m->brakemode) {
-        posDuty=m->PWMperiod - ((unsigned int)(m->power)*(m->PWMperiod))/100; //inverted PWM duty
-        negDuty=m->PWMperiod; //other side of motor is high all the time
+        posDuty=(m->PWMperiod) - ((unsigned int)(m->power)*(m->PWMperiod))/100; //inverted PWM duty
+        negDuty=(m->PWMperiod); //other side of motor is high all the time
     }
     else {
         posDuty=0; //other side of motor is low all the time
@@ -80,26 +75,92 @@ void setMotorPWM(DC_motor *m)
 }
 
 //function to stop the robot gradually 
-void stop(DC_motor *mL, DC_motor *mR)
+void stop(struct DC_motor *mL, struct DC_motor *mR)
 {
-
+    while((mL->power)>0 && (mR->power)>0)//whilst the power is non zero 
+    {
+        //individually check the power to each motor is above zero 
+        if ((mL->power)>0){
+            (mL->power)--;//decrement power       
+        }
+        if ((mR->power)>0){
+            (mR->power)--; //decrement power
+        }
+        setMotorPWM(mL);//set new motor power values
+        setMotorPWM(mR);
+        __delay_us(50);//delay to decrease power slowly
+    }
 }
 
 //function to make the robot turn left 
-void turnLeft(DC_motor *mL, DC_motor *mR)
+void turnLeft(struct DC_motor *mL, struct DC_motor *mR)
 {
-
+    (mL->direction) = 0; //set motor direction backward for left
+    (mR->direction) = 1; //set motor direction forward for right
+    setMotorPWM(mL);//set new motor direction 
+    setMotorPWM(mR);
+    for (unsigned int i = 0; i <50; ++i)//increase power value up to 50 (this value is tunable for how fast you want it to go)
+    {
+        (mL->power)++; //increase the power to both motors slowly
+        (mR->power)++;
+        setMotorPWM(mL);//set new motor power values
+        setMotorPWM(mR);
+        __delay_us(50);//delay to increase power slowly
+    } 
 }
 
 //function to make the robot turn right 
-void turnRight(DC_motor *mL, DC_motor *mR)
+void turnRight(struct DC_motor *mL, struct DC_motor *mR)
 {
- 
+    (mL->direction) = 1; //set motor direction forward for left
+    (mR->direction) = 0; //set motor direction backward for right
+    setMotorPWM(mL);//set new motor direction 
+    setMotorPWM(mR);
+    for (unsigned int i = 0; i <50; ++i)//increase power value up to 50 (this value is tunable for how fast you want it to go)
+    {
+        (mL->power)++; //increase the power to both motors slowly
+        (mR->power)++;
+        setMotorPWM(mL);//set new motor power values
+        setMotorPWM(mR);
+        __delay_us(50);//delay to increase power slowly
+    } 
 }
 
 //function to make the robot go straight
-void fullSpeedAhead(DC_motor *mL, DC_motor *mR)
+void fullSpeedAhead(struct DC_motor *mL, struct DC_motor *mR)
 {
-
+ (mL->direction) = 1; //set motor direction forward for left
+ (mR->direction) = 1; //set motor direction forward for right 
+ //here we will have a for loop to increase the power to the motor gradually
+    for (unsigned int i = 0; i <50; ++i)//increase power value up to max (defined at the top) (this value is tunable for how fast you want it to go)
+    {
+        (mL->power)++; //increase the power to both motors slowly
+        (mR->power)++;
+        setMotorPWM(mL);//set new motor power values
+        setMotorPWM(mR);
+        __delay_us(100);//delay to increase power slowly
+    } 
 }
 
+//function to turn left 90 degrees
+void left90(struct DC_motor *mL, struct DC_motor *mR)
+{
+    turnLeft(mL,mR);//invoke the turn left
+    __delay_ms(5);//tune this so it corresponds to a 90 degree change
+    stop(mL,mR);//stop the rotation of the buggy 
+}
+
+//function to turn right 90 degrees
+void right90(struct DC_motor *mL, struct DC_motor *mR)
+{
+    turnRight(mL,mR);//invoke the turn right
+    __delay_ms(5);//tune this so it corresponds to a 90 degree change
+    stop(mL,mR);//stop the rotation of the buggy 
+}
+
+void rotate180right(struct DC_motor *mL, struct DC_motor *mR)
+{
+    turnRight(mL,mR);//invoke the turn right
+    __delay_ms(10);//tune this so it corresponds to a 180 degree change
+    stop(mL,mR);//stop the rotation of the buggy 
+}

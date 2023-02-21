@@ -15,11 +15,14 @@ typedef struct DC_motor { //definition of DC_motor structure
 } DC_motor;
 
 //function prototypes
-void initDCmotorsPWM(int PWMperiod); // function to setup PWM
-void setMotorPWM(DC_motor *m);
-void stop(DC_motor *mL, DC_motor *mR);
-void turnLeft(DC_motor *mL, DC_motor *mR);
-void turnRight(DC_motor *mL, DC_motor *mR);
-void fullSpeedAhead(DC_motor *mL, DC_motor *mR);
+void initDCmotorsPWM(unsigned int PWMperiod); // function to setup PWM
+void setMotorPWM(struct DC_motor *m);
+void stop(struct DC_motor *mL, struct DC_motor *mR);
+void turnLeft(struct DC_motor *mL, struct DC_motor *mR);
+void turnRight(struct DC_motor *mL, struct DC_motor *mR);
+void fullSpeedAhead(struct DC_motor *mL, struct DC_motor *mR);
+void left90(struct DC_motor *mL, struct DC_motor *mR);
+void right90(struct DC_motor *mL, struct DC_motor *mR);
+void rotate180right(struct DC_motor *mL, struct DC_motor *mR);
 
 #endif
