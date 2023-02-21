@@ -8,30 +8,34 @@
 
 #include <xc.h>
 #include "rc_servo.h"
+#include "ADC.h"
+#include <stdio.h>
 #include "LCD.h"
-
 #define _XTAL_FREQ 64000000 //note intrinsic _delay function is 62.5ns at 64,000,000Hz  
 
 void main(void){
     Timer0_init();
     Interrupts_init();
+    ADC_init();
+    LCD_Init();
+    LCD_setline(0); //Set Line low=1 line,high=2nd line
     while(1){
- 
-		//write your code to call angle2PWM() to set the servo angle
-        //runs 180 times incrementing the angle each time 
-        int x;
-        
-        for (x=90;x&-90;x--){
-            angle2PWM(x);
+             char LDR[3];
+        //check if it is bright outside
+        if (ADCDarkorLight()&1){
+            //if so simulate  open window w servo
+            angle2PWM(90);
             __delay_ms(50);
         }
-
-        for (x=-90;x&90;x++){
-            angle2PWM(x);
-            //20 degree angle change in a second
-            __delay_ms(50);
-        }
-        //write your code to call angle2PWM() to set the servo angle
-        //runs 180 times incrementing the angle each time but this time back down
+       //check if it is dark outside
+        if (ADCDarkorLight()&0){
+        //if so simulate closed window w servo
+            angle2PWM(-90);
+              __delay_ms(50);
+                }
+        ADC2String(LDR,ADC_getval());
+        LCD_sendstring(LDR);
+        __delay_ms(500);
+       LCD_sendbyte(DCLEAR,0);
     }
 }
