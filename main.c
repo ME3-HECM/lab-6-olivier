@@ -20,16 +20,17 @@ void main(void){
 		//write your code to call angle2PWM() to set the servo angle
         //runs 180 times incrementing the angle each time 
         int x;
-        for (x=-85;x<=85;x++){
+       
+        for (x=-90;x<=90;x++){
             angle2PWM(x);
             //20 degree angle change in a second
-            __delay_ms(50);
+            __delay_ms(10);
         }
         //write your code to call angle2PWM() to set the servo angle
         //runs 180 times incrementing the angle each time but this time back down
-        for (x=85;x>=(-85);x--){
+        for (x=90;x>=(-90);x--){
             angle2PWM(x);
-            __delay_ms(50);
+            __delay_ms(10);
         }
 
     }

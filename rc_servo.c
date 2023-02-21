@@ -43,7 +43,7 @@ void Timer0_init(void)
 {
     T0CON1bits.T0CS=0b010; // Fosc/4
     T0CON1bits.T0ASYNC=1; // see datasheet errata - needed to ensure correct operation when Fosc/4 used as clock source
-    T0CON1bits.T0CKPS=0b0011; // need to work out prescaler to produce a timer tick corresponding to 1 deg angle change
+    T0CON1bits.T0CKPS=0b0011; // need to work out prescaler to produce a timer tick corresponding to 1 deg angle change (1:8)
     T0CON0bits.T016BIT=1;	//16bit mode	
 	
     // it's a good idea to initialise the timer so that it initially overflows after 20 ms
@@ -73,6 +73,6 @@ void angle2PWM(unsigned int angle){
     //additional ticks per angle time = 1/180 for amount of time for one angle then
     //angletime/Tint= additional ticks for one angle
     //total period =20ms, = on period +off period, off=20-on
-    on_period = 3000 + (11*angle);	//avoid floating point numbers and be careful of calculation order...
+    on_period = 3000 + (20*angle);	//avoid floating point numbers and be careful of calculation order...
     off_period = T_PERIOD-on_period;
 }
