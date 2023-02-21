@@ -1,5 +1,6 @@
 #include <xc.h>
 #include "ADC.h"
+#include "rc_servo.h"
 
 /************************************
 / ADC_init_init
@@ -37,16 +38,15 @@ unsigned int ADC_getval(void)
     return tmpval; //return this value when the function is called
 }
 
-char ADCDarkorLight(void)
+void ADCDarkorLight(void)
 {
-    unsigned int ADCval;
-    ADCval= ADC_getval();
+    unsigned int ADCval= ADC_getval();
     // this checks for darkness
-    if (ADCval<=80){
-        return 0;
+    if (ADCval<=50){
+        angle2PWM(90);
     }
     //else check for light and return 1 if true
-    else if (ADCval>150){
-        return 1;
+    if (ADCval>150){
+        angle2PWM(-90);
     }
 }

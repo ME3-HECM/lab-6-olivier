@@ -7,5 +7,5 @@
 
 void ADC_init(void);
 unsigned int ADC_getval(void);
-char ADCDarkorLight(void);
+void ADCDarkorLight(void);
 #endif
