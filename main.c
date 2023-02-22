@@ -32,8 +32,8 @@ void main(void){
     motorR.posDutyHighByte=(unsigned char *)(&CCPR3H);  //store address of CCP3 duty high byte
     motorR.negDutyHighByte=(unsigned char *)(&CCPR4H);  //store address of CCP4 duty high byte
     motorR.PWMperiod=PWMcycle; 			//store PWMperiod for motor (value of T2PR in this case)
+        __delay_ms(3000); //time to place buggy down and leave it
     while(1){
-        left90(&motorL, &motorR);
-        __delay_ms(200);
+        TraceSquare();
     }
 }

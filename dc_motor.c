@@ -114,7 +114,7 @@ void turnLeft(struct DC_motor *mL, struct DC_motor *mR)
         mR->power++;
         setMotorPWM(mL);//set new motor power values
         setMotorPWM(mR);
-        __delay_us(400);//delay to increase power slowly
+        __delay_us(100);//delay to increase power slowly
     } 
 }
 
@@ -131,7 +131,7 @@ void turnRight(struct DC_motor *mL, struct DC_motor *mR)
         mR->power++;
         setMotorPWM(mL);//set new motor power values
         setMotorPWM(mR);
-        __delay_us(400);//delay to increase power slowly
+        __delay_us(100);//delay to increase power slowly
     } 
 }
 
@@ -154,29 +154,44 @@ void fullSpeedAhead(struct DC_motor *mL, struct DC_motor *mR)
 //function to turn left 90 degrees
 void left90(struct DC_motor *mL, struct DC_motor *mR)
 {
-    int x;
     //this has been tuned to invoke a turn enough times for a 90 degree change
-    for (x=0;x<75;x++){
     turnLeft(mL,mR);//invoke the turn left
-    }
+    __delay_ms(100);
     stop(mL,mR);//stop the rotation of the buggy 
-    __delay_ms(800);
 }
 
 //function to turn right 90 degrees
 void right90(struct DC_motor *mL, struct DC_motor *mR)
-{    int x;
+{   
  //this has been tuned to invoke a turn enough times for a 90 degree change
-    for (x=0;x<75;x++){
     turnRight(mL,mR);//invoke the turn right
-  }
+   __delay_ms(100);
     stop(mL,mR);//stop the rotation of the buggy 
-    __delay_ms(800);
 }
 
 void rotate180right(struct DC_motor *mL, struct DC_motor *mR)
 {
     turnRight(mL,mR);//invoke the turn right
     __delay_ms(10);//tune this so it corresponds to a 180 degree change
-    stop(mL,mR);//stop the rotation of the buggy 
+}
+
+void TraceSquare(void)
+{
+
+        fullSpeedAhead(&motorL, &motorR);
+        //calibrated delay to move approx one meter
+        __delay_ms(2000);
+        //move left 90deg
+        left90(&motorL, &motorR);
+        fullSpeedAhead(&motorL, &motorR);
+        __delay_ms(2000);
+        left90(&motorL, &motorR);
+        fullSpeedAhead(&motorL, &motorR);
+        __delay_ms(2000);
+        left90(&motorL, &motorR);
+        fullSpeedAhead(&motorL, &motorR);
+        __delay_ms(2000);
+        left90(&motorL, &motorR);
+        fullSpeedAhead(&motorL, &motorR);
+        __delay_ms(2000);
 }
