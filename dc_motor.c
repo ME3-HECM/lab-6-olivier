@@ -169,15 +169,15 @@ void right90(struct DC_motor *mL, struct DC_motor *mR)
     stop(mL,mR);//stop the rotation of the buggy 
 }
 
-void rotate180right(struct DC_motor *mL, struct DC_motor *mR)
+void rotate180left(struct DC_motor *mL, struct DC_motor *mR)
 {
-    turnRight(mL,mR);//invoke the turn right
-    __delay_ms(10);//tune this so it corresponds to a 180 degree change
+    turnLeft(mL,mR);//invoke the turn right
+    __delay_ms(180);//tune this so it corresponds to a 180 degree change
+    stop(mL,mR);//stop the rotation of the buggy 
 }
 
-void TraceSquare(void)
+void TraceSquareL(void)
 {
-
         fullSpeedAhead(&motorL, &motorR);
         //calibrated delay to move approx one meter
         __delay_ms(2000);
@@ -191,7 +191,20 @@ void TraceSquare(void)
         left90(&motorL, &motorR);
         fullSpeedAhead(&motorL, &motorR);
         __delay_ms(2000);
-        left90(&motorL, &motorR);
+}
+void TraceSquareR(void)
+{
+        fullSpeedAhead(&motorL, &motorR);
+        //calibrated delay to move approx one meter
+        __delay_ms(2000);
+        //move left 90deg
+        right90(&motorL, &motorR);
+        fullSpeedAhead(&motorL, &motorR);
+        __delay_ms(2000);
+        right90(&motorL, &motorR);
+        fullSpeedAhead(&motorL, &motorR);
+        __delay_ms(2000);
+        right90(&motorL, &motorR);
         fullSpeedAhead(&motorL, &motorR);
         __delay_ms(2000);
 }

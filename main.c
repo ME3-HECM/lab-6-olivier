@@ -34,6 +34,8 @@ void main(void){
     motorR.PWMperiod=PWMcycle; 			//store PWMperiod for motor (value of T2PR in this case)
         __delay_ms(3000); //time to place buggy down and leave it
     while(1){
-        TraceSquare();
+        TraceSquareL();
+        rotate180left(&motorL,&motorR);
+        TraceSquareR();
     }
 }

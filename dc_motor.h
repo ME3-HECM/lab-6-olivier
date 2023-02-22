@@ -25,7 +25,8 @@ void turnRight(struct DC_motor *mL, struct DC_motor *mR);
 void fullSpeedAhead(struct DC_motor *mL, struct DC_motor *mR);
 void left90(struct DC_motor *mL, struct DC_motor *mR);
 void right90(struct DC_motor *mL, struct DC_motor *mR);
-void rotate180right(struct DC_motor *mL, struct DC_motor *mR);
-void TraceSquare(void);
+void rotate180left(struct DC_motor *mL, struct DC_motor *mR);
+void TraceSquareL(void);
+void TraceSquareR(void);
 
 #endif
