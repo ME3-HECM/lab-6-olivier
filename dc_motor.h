@@ -13,7 +13,9 @@ typedef struct DC_motor { //definition of DC_motor structure
     unsigned char *posDutyHighByte; //PWM duty address for motor +ve side
     unsigned char *negDutyHighByte; //PWM duty address for motor -ve side
 } DC_motor;
+struct DC_motor motorL, motorR; 		//declare two DC_motor structures 
 
+  
 //function prototypes
 void initDCmotorsPWM(unsigned int PWMperiod); // function to setup PWM
 void setMotorPWM(struct DC_motor *m);

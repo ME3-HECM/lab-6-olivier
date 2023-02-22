@@ -11,17 +11,13 @@
 #include "LCD.h"
 #include "ADC.h"
 #include "dc_motor.h"
+#include <stdio.h>
 
 #define _XTAL_FREQ 64000000 //note intrinsic _delay function is 62.5ns at 64,000,000Hz  
 
 void main(void){
-    Timer0_init();
-    Interrupts_init();
-    ADC_init();
-    initDCmotorsPWM(99);
-    
     unsigned int PWMcycle = 99;
-    struct DC_motor motorL, motorR; 		//declare two DC_motor structures 
+    initDCmotorsPWM(PWMcycle);
 
     motorL.power=0; 						//zero power to start
     motorL.direction=1; 					//set default motor direction
@@ -37,8 +33,7 @@ void main(void){
     motorR.negDutyHighByte=(unsigned char *)(&CCPR4H);  //store address of CCP4 duty high byte
     motorR.PWMperiod=PWMcycle; 			//store PWMperiod for motor (value of T2PR in this case)
     while(1){
-        
-        turnLeft(&motorL, &motorR);
-        __delay_ms(10);
+        left90(&motorL, &motorR);
+        __delay_ms(200);
     }
 }
